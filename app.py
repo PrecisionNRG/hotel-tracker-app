@@ -6,13 +6,12 @@ import hashlib
 from datetime import datetime
 from email.message import EmailMessage
 import smtplib
-from config import SMTP_EMAIL, SMTP_PASSWORD, SMTP_SERVER, SMTP_PORT, SEND_TO
 
 def send_confirmation_email(data_summary):
     msg = EmailMessage()
     msg["Subject"] = "📬 New Hotel Log Entry Submitted"
-    msg["From"] = SMTP_EMAIL
-    msg["To"] = SEND_TO
+    msg["From"] = os.environ.get("SMTP_EMAIL")
+    msg["To"] = os.environ.get("SEND_TO")
     msg.set_content(f"""
 A new hotel form entry was submitted.
 
@@ -22,11 +21,11 @@ Details:
 -- Hotel Tracker App
 """)
     try:
-        with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
+        with smtplib.SMTP(os.environ.get("SMTP_SERVER"), int(os.environ.get("SMTP_PORT"))) as server:
             server.starttls()
-            server.login(SMTP_EMAIL, SMTP_PASSWORD)
+            server.login(os.environ.get("SMTP_EMAIL"), os.environ.get("SMTP_PASSWORD"))
             server.send_message(msg)
-        st.info("📧 Confirmation email sent to Allie.")
+        st.info("📧 Confirmation email sent.")
     except Exception as e:
         st.error(f"❌ Email failed: {e}")
 
