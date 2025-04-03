@@ -12,7 +12,7 @@ SMTP_EMAIL = "admin@precisionnrgsystems.com"
 SMTP_PASSWORD = "638979"  # Replace this with your Outlook app password
 SMTP_SERVER = "smtp.office365.com"
 SMTP_PORT = 587
-SEND_TO = "allie@precisionnrgsystems.com"
+SEND_TO = "jmilano@precisionnrgsystems.com"
 
 def send_confirmation_email(data_summary):
     msg = EmailMessage()
