@@ -12,7 +12,7 @@ LOG_FILE = "hotel_log.csv"
 # --------------------------
 USERS = {
     "admin": "letmein",
-    "employee": "employee123"
+    "employee": "employee1"
 }
 
 def hash_password(password):
