@@ -9,7 +9,7 @@ import smtplib
 
 # --- EMAIL CONFIG ---
 SMTP_EMAIL = "admin@precisionnrgsystems.com"
-SMTP_PASSWORD = "638979"  # Replace this with your Outlook app password
+SMTP_PASSWORD = "920342"  # Replace this with your Outlook app password
 SMTP_SERVER = "smtp.office365.com"
 SMTP_PORT = 587
 SEND_TO = "jmilano@precisionnrgsystems.com"
