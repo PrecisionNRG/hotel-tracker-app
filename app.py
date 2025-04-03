@@ -55,15 +55,16 @@ if st.session_state.username == "admin":
 # --------------------------
 else:
    # Logo (centered at top)
-st.markdown(
-    """
-    <div style="text-align: center; padding-top: 10px; padding-bottom: 5px;">
-        <img src="logo.png" width="150">
-        <div style="font-size: 14px; color: gray;">Precision Energy Systems</div>
-    </div>
-    """,
-    unsafe_allow_html=True
-)
+else:
+    st.markdown(
+        """
+        <div style="text-align: center; padding-top: 10px; padding-bottom: 5px;">
+            <img src="logo.png" width="150">
+            <div style="font-size: 14px; color: gray;">Precision Energy Systems</div>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 
 st.title("🏨 Precision Energy Hotel Usage Tracker")
 st.write("Easily log and track employee hotel stays.")
