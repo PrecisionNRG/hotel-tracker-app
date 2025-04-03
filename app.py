@@ -114,7 +114,7 @@ else:
                 "Check-Out": row["Check-Out"].strftime("%m/%d/%Y"),
                 "Actual Cost": row["Actual Cost"],
                 "Prepared By": prepared_by,
-               "Date Prepared": date_prepared.strftime("%m/%d/%Y")
+               "Date Prepared": date_prepared.strftime("%m/%d/%Y"),
                 "Job Number": job_number
             }
             df_new = pd.concat([df_new, pd.DataFrame([record])], ignore_index=True)
