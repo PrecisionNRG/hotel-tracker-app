@@ -6,13 +6,7 @@ import hashlib
 from datetime import datetime
 from email.message import EmailMessage
 import smtplib
-
-# --- EMAIL CONFIG ---
-SMTP_EMAIL = "admin@precisionnrgsystems.com"
-SMTP_PASSWORD = "920342"  # Replace this with your Outlook app password
-SMTP_SERVER = "smtp.office365.com"
-SMTP_PORT = 587
-SEND_TO = "jmilano@precisionnrgsystems.com"
+from config import SMTP_EMAIL, SMTP_PASSWORD, SMTP_SERVER, SMTP_PORT, SEND_TO
 
 def send_confirmation_email(data_summary):
     msg = EmailMessage()
