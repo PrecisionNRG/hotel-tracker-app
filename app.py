@@ -54,8 +54,7 @@ if st.session_state.username == "admin":
 # Employee View (Form)
 # --------------------------
 else:
-   # Logo (centered at top)
-else:
+    # Logo (centered at top)
     st.markdown(
         """
         <div style="text-align: center; padding-top: 10px; padding-bottom: 5px;">
@@ -66,9 +65,8 @@ else:
         unsafe_allow_html=True
     )
 
-st.title("🏨 Precision Energy Hotel Usage Tracker")
-st.write("Easily log and track employee hotel stays.")
-
+    st.title("🏨 Precision Energy Hotel Usage Tracker")
+    st.write("Easily log and track employee hotel stays.")
 
     # HOTEL DETAILS
     st.subheader("Hotel Information")
