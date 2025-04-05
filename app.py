@@ -1,4 +1,3 @@
-
 import streamlit as st
 import pandas as pd
 import os
@@ -7,19 +6,37 @@ from datetime import datetime
 from email.message import EmailMessage
 import smtplib
 
-def send_confirmation_email(data_summary):
+# --------------------------
+# Email Function
+# --------------------------
+def send_confirmation_email(hotel_name, job_number, prepared_by, room_entries):
     msg = EmailMessage()
     msg["Subject"] = "📬 New Hotel Log Entry Submitted"
     msg["From"] = os.environ.get("SMTP_EMAIL")
     msg["To"] = os.environ.get("SEND_TO")
-    msg.set_content(f"""
-A new hotel form entry was submitted.
 
-Details:
-{data_summary}
+    # Build detailed summary
+    summary = f"""
+Hotel: {hotel_name}
+Job Number: {job_number}
+Prepared By: {prepared_by}
+Total Rooms: {len(room_entries)}
 
--- Hotel Tracker App
-""")
+Room Details:
+"""
+    for i, room in enumerate(room_entries, start=1):
+        summary += f"""
+Room {i}:
+  • Room #: {room['Room #']}
+  • Employee (Day): {room['Employee (Day)']}
+  • Employee (Night): {room['Employee (Night)']}
+  • Check-In: {room['Check-In']}
+  • Check-Out: {room['Check-Out']}
+  • Actual Cost: ${room['Actual Cost']:.2f}
+"""
+
+    msg.set_content(summary)
+
     try:
         with smtplib.SMTP(os.environ.get("SMTP_SERVER"), int(os.environ.get("SMTP_PORT"))) as server:
             server.starttls()
@@ -29,8 +46,10 @@ Details:
     except Exception as e:
         st.error(f"❌ Email failed: {e}")
 
+# --------------------------
+# App Setup
+# --------------------------
 LOG_FILE = "hotel_log.csv"
-
 USERS = {
     "admin": "letmein",
     "employee": "employee1"
@@ -41,6 +60,9 @@ def hash_password(password):
 
 HASHED_USERS = {u: hash_password(p) for u, p in USERS.items()}
 
+# --------------------------
+# Authentication
+# --------------------------
 if "authenticated" not in st.session_state:
     st.session_state.authenticated = False
     st.session_state.username = ""
@@ -59,6 +81,9 @@ if not st.session_state.authenticated:
             st.error("❌ Invalid credentials")
     st.stop()
 
+# --------------------------
+# Admin View
+# --------------------------
 if st.session_state.username == "admin":
     st.title("📚 Admin Dashboard - Hotel Log History")
     if os.path.exists(LOG_FILE):
@@ -68,6 +93,9 @@ if st.session_state.username == "admin":
     else:
         st.info("No entries have been submitted yet.")
 
+# --------------------------
+# Employee View
+# --------------------------
 else:
     st.image("logo.png", width=150, caption="Precision Energy Systems")
     st.title("🏨 Precision Energy Hotel Usage Tracker")
@@ -87,11 +115,11 @@ else:
 
     for i in range(num_rooms):
         st.markdown(f"**Room {i+1} Details**")
-        room_num = st.text_input(f"Room Number", key=f"room_num_{i}")
-        emp_day = st.text_input(f"Employee (Day Shift)", key=f"emp_day_{i}")
-        emp_night = st.text_input(f"Employee (Night Shift)", key=f"emp_night_{i}")
-        check_in = st.date_input(f"Check-In Date", key=f"check_in_{i}")
-        check_out = st.date_input(f"Check-Out Date", key=f"check_out_{i}")
+        room_num = st.text_input("Room Number", key=f"room_num_{i}")
+        emp_day = st.text_input("Employee (Day Shift)", key=f"emp_day_{i}")
+        emp_night = st.text_input("Employee (Night Shift)", key=f"emp_night_{i}")
+        check_in = st.date_input("Check-In Date", key=f"check_in_{i}")
+        check_out = st.date_input("Check-Out Date", key=f"check_out_{i}")
         actual_cost = st.number_input("Actual Cost ($)", min_value=0.0, format="%.2f", key=f"actual_cost_{i}")
         room_entries.append({
             "Room #": room_num,
@@ -134,6 +162,6 @@ else:
             df_new = pd.concat([old_data, df_new], ignore_index=True)
 
         df_new.to_csv(LOG_FILE, index=False)
-        summary = f"Hotel: {hotel_name}, Job: {job_number}, Prepared By: {prepared_by}, Total Rooms: {num_rooms}"
-        send_confirmation_email(summary)
+        send_confirmation_email(hotel_name, job_number, prepared_by, room_entries)
         st.success("✅ Entry saved successfully!")
+
